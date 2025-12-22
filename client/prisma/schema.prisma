@@ -1,63 +1,124 @@
-// prisma/schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  // Connection details are now managed strictly in prisma.config.ts
+  // Connection details are managed in prisma.config.ts
 }
 
-// --- KEEP YOUR MODELS BELOW (User, Product, Auction, Bid) ---
 enum Role {
   ARTISAN
   CUSTOMER
   ADMIN
 }
 
+enum AuctionStatus {
+  ACTIVE
+  SOLD
+  UNSOLD
+}
+
 model User {
-  id            String    @id @default(cuid())
-  clerkId       String    @unique
-  email         String    @unique
-  name          String?
-  role          Role      @default(CUSTOMER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  products      Product[]
-  bids          Bid[]
+  id           String        @id @default(cuid())
+  clerkId      String        @unique
+  email        String        @unique
+  name         String?
+  role         Role          @default(CUSTOMER)
+  languages    String[]
+  preferences  Json?
+  profile      Profile?
+  products     Product[]
+  orders       Order[]
+  bids         Bid[]
+  forumPosts   ForumPost[]
+  chatHistory  ChatHistory[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Profile {
+  id           String  @id @default(cuid())
+  user         User    @relation(fields: [userId], references: [id])
+  userId       String  @unique
+  businessName String? 
+  craftType    String?
+  bio          String?
+  location     String? 
 }
 
 model Product {
-  id          String   @id @default(cuid())
+  id          String       @id @default(cuid())
   title       String
   description String
   price       Float
   category    String
-  artisan     User     @relation(fields: [artisanId], references: [id])
+  materials   String[]
+  images      String[]
+  stock       Int          @default(1)
+  tags        String[]
+  views       Int          @default(0)
+  salesCount  Int          @default(0)
+  artisan     User         @relation(fields: [artisanId], references: [id])
   artisanId   String
-  isAuction   Boolean  @default(false)
-  auction     Auction?
-  createdAt   DateTime @default(now())
+  auction     AuctionItem?
+  createdAt   DateTime     @default(now())
 }
 
-model Auction {
-  id           String   @id @default(cuid())
-  product      Product  @relation(fields: [productId], references: [id])
-  productId    String   @unique
-  startingBid  Float
-  currentBid   Float    @default(0)
+model Order {
+  id         String   @id @default(cuid())
+  total      Float
+  status     String   @default("PENDING")
+  items      Json     
+  customer   User     @relation(fields: [customerId], references: [id])
+  customerId String
+  createdAt  DateTime @default(now())
+}
+
+model AuctionItem {
+  id           String        @id @default(cuid())
+  product      Product       @relation(fields: [productId], references: [id])
+  productId    String        @unique
+  basePrice    Float
+  reservePrice Float?
+  currentBid   Float         @default(0)
+  startTime    DateTime      @default(now())
   endTime      DateTime
-  status       String   @default("ACTIVE")
+  status       AuctionStatus @default(ACTIVE)
   bids         Bid[]
 }
 
 model Bid {
-  id        String   @id @default(cuid())
+  id        String      @id @default(cuid())
   amount    Float
-  bidder    User     @relation(fields: [bidderId], references: [id])
-  bidderId  String
-  auction   Auction  @relation(fields: [auctionId], references: [id])
+  timestamp DateTime    @default(now())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+  auction   AuctionItem @relation(fields: [auctionId], references: [id])
   auctionId String
+}
+
+model ChatHistory {
+  id       String @id @default(cuid())
+  messages Json   
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+}
+
+model ForumPost {
+  id      String   @id @default(cuid())
+  content String
+  tags    String[]
+  flagged Boolean  @default(false)
+  user    User     @relation(fields: [userId], references: [id])
+  userId  String
+}
+
+model Story {
+  id        String   @id @default(cuid())
+  title     String
+  content   String   
+  heroImage String?
+  artisanId String
   createdAt DateTime @default(now())
 }
