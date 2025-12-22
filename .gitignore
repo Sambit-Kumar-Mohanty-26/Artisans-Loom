@@ -1,20 +1,31 @@
-# Dependencies
+# Root dependencies
 node_modules/
 .pnp
 .pnp.js
 
-# Build outputs
-.next/
-out/
-build/
-dist/
+# Client specific (Next.js)
+client/node_modules/
+client/.next/
+client/out/
+client/build/
+client/dist/
 
-# Environments / Secrets
+# Server specific (Node.js/Express)
+server/node_modules/
+server/dist/
+
+# Environments / Secrets (Protecting your API Keys and DB URL)
 .env
 .env.local
 .env.production
+.env.development
 *.local
 
 # Debug logs
 npm-debug.log*
 yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
