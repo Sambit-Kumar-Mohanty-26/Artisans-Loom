@@ -4,13 +4,15 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-   url = env("DATABASE_URL")
+  // Note: url is omitted here for Prisma 7 compatibility. 
+  // It must be defined in your prisma.config.ts.
 }
 
 enum Role {
   ARTISAN
   CUSTOMER
   ADMIN
+  PENDING
 }
 
 enum AuctionStatus {
@@ -24,7 +26,7 @@ model User {
   clerkId      String        @unique
   email        String        @unique
   name         String?
-  role         Role          @default(CUSTOMER)
+  role         Role          @default(PENDING)
   languages    String[]
   preferences  Json?
   profile      Profile?
@@ -38,13 +40,15 @@ model User {
 }
 
 model Profile {
-  id           String  @id @default(cuid())
-  user         User    @relation(fields: [userId], references: [id])
-  userId       String  @unique
-  businessName String? 
-  craftType    String?
-  bio          String?
-  location     String? 
+  id                String  @id @default(cuid())
+  user              User    @relation(fields: [userId], references: [id])
+  userId            String  @unique
+  businessName      String?
+  craftType         String? 
+  bio               String?
+  location          String?
+  state             String? 
+  yearsOfExperience Int?    
 }
 
 model Product {
@@ -62,17 +66,28 @@ model Product {
   artisan     User         @relation(fields: [artisanId], references: [id])
   artisanId   String
   auction     AuctionItem?
-  createdAt   DateTime     @default(now())
+  orderItems  OrderItem[]  
+  createdAt   DateTime      @default(now())
 }
 
 model Order {
-  id         String   @id @default(cuid())
+  id         String      @id @default(cuid())
   total      Float
-  status     String   @default("PENDING")
-  items      Json     
-  customer   User     @relation(fields: [customerId], references: [id])
+  status     String      @default("PENDING")
+  customer   User        @relation(fields: [customerId], references: [id])
   customerId String
-  createdAt  DateTime @default(now())
+  items      OrderItem[] 
+  createdAt  DateTime    @default(now())
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int
+  price     Float   
 }
 
 model AuctionItem {
@@ -100,7 +115,7 @@ model Bid {
 
 model ChatHistory {
   id       String @id @default(cuid())
-  messages Json   
+  messages Json
   user     User   @relation(fields: [userId], references: [id])
   userId   String
 }
@@ -117,7 +132,7 @@ model ForumPost {
 model Story {
   id        String   @id @default(cuid())
   title     String
-  content   String   
+  content   String
   heroImage String?
   artisanId String
   createdAt DateTime @default(now())

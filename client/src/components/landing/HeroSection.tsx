@@ -5,8 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Search, Camera, ArrowRight, Gift, Heart, Mic } from "lucide-react";
 import Image from "next/image";
 import { RoyalDivider } from "@/components/ui/royal-divider";
+import { UserButton, SignInButton, useUser } from "@clerk/nextjs";
 
 export default function HeroSection() {
+  const { isSignedIn } = useUser();
+  
   return (
     <section className="relative w-full h-screen overflow-hidden bg-[#FDFBF7] selection:bg-[#D4AF37] selection:text-white flex flex-col justify-between">
 
@@ -41,8 +44,18 @@ export default function HeroSection() {
             <Button className="h-9 px-4 rounded-full bg-linear-to-r from-[#FFF9F0] to-[#FFF0E0] text-[#D97742] hover:shadow-md border border-[#FFE4CC] text-sm">
               <Gift className="w-3 h-3 mr-2" /> Gifting
             </Button>
-            <div className="w-9 h-9 rounded-full bg-[#EBE5DA] flex items-center justify-center text-[#4A3526] cursor-pointer hover:bg-[#DDD5C5] transition border border-white/60">
-               <span className="text-sm font-bold">👤</span>
+            <div className="flex items-center gap-2">
+              {isSignedIn ? (
+                <UserButton />
+              ) : (
+                <>
+                  <SignInButton mode="modal">
+                    <Button variant="outline" className="h-9 px-4 rounded-full border-[#D4AF37]/30 text-[#4A3526] hover:bg-white bg-white/40 backdrop-blur-sm text-sm">
+                      Sign In
+                    </Button>
+                  </SignInButton>
+                </>
+              )}
             </div>
           </div>
         </header>
