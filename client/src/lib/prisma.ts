@@ -1,22 +1,27 @@
 import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-let adapter;
+let prismaOptions: any = {};
 
-// Only create adapter if DATABASE_URL is available
-if (process.env.DATABASE_URL) {
-  const pool = new Pool({ 
-    connectionString: process.env.DATABASE_URL 
-  });
-  adapter = new PrismaPg(pool);
+// Add adapter only if we're in runtime and have DATABASE_URL
+if (typeof window === 'undefined' && process.env.DATABASE_URL) {
+  try {
+    const { PrismaPg } = require('@prisma/adapter-pg');
+    const { Pool } = require('pg');
+    
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+    });
+    const adapter = new PrismaPg(pool);
+    
+    prismaOptions = { adapter };
+  } catch (error) {
+    // If adapter setup fails (e.g., during build), continue without it
+    console.warn('Could not initialize Prisma adapter, continuing without it:', error);
+  }
 }
 
-// 3. Pass the adapter to the constructor (or no adapter if not available)
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient(adapter ? { adapter } : undefined);
+export const prisma = globalForPrisma.prisma || new PrismaClient(prismaOptions);
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
