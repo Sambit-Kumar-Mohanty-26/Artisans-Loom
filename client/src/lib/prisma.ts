@@ -4,17 +4,19 @@ import { Pool } from "pg";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-// 1. Create a pool using your environment variable
-const pool = new Pool({ 
-  connectionString: process.env.DATABASE_URL 
-});
+let adapter;
 
-// 2. Initialize the adapter required for Prisma 7
-const adapter = new PrismaPg(pool);
+// Only create adapter if DATABASE_URL is available
+if (process.env.DATABASE_URL) {
+  const pool = new Pool({ 
+    connectionString: process.env.DATABASE_URL 
+  });
+  adapter = new PrismaPg(pool);
+}
 
-// 3. Pass the adapter to the constructor
+// 3. Pass the adapter to the constructor (or no adapter if not available)
 export const prisma =
   globalForPrisma.prisma ||
-  new PrismaClient({ adapter });
+  new PrismaClient(adapter ? { adapter } : undefined);
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

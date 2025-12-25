@@ -14,17 +14,22 @@ export async function onboardCustomerAction(formData: FormData) {
   const craftTypes = formData.get("craftTypes")?.toString().split(",").map(s => s.trim()) || [];
   const budget = formData.get("budget")?.toString();
 
-  // Update the user record in Prisma
-  await prisma.user.update({
-    where: { clerkId: userId },
-    data: {
-      role: "CUSTOMER",
-      preferences: {
-        favoriteCrafts: craftTypes,
-        budget: budget
-      }
-    },
-  });
+  try {
+    // Update the user record in Prisma
+    await prisma.user.update({
+      where: { clerkId: userId },
+      data: {
+        role: "CUSTOMER",
+        preferences: {
+          favoriteCrafts: craftTypes,
+          budget: budget
+        }
+      },
+    });
+  } catch (error) {
+    console.error('Error updating user in onboardCustomerAction:', error);
+    throw new Error('Failed to update user profile');
+  }
 
   // Redirect to the shop once finished
   redirect("/shop");
@@ -43,22 +48,27 @@ export async function onboardArtisanAction(formData: FormData) {
   const location = formData.get("location")?.toString();
   const bio = formData.get("bio")?.toString();
 
-  // Update the user record in Prisma
-  await prisma.user.update({
-    where: { clerkId: userId },
-    data: {
-      role: "ARTISAN",
-      profile: {
-        create: {
-          businessName,
-          craftType,
-          yearsOfExperience,
-          location,
-          bio
+  try {
+    // Update the user record in Prisma
+    await prisma.user.update({
+      where: { clerkId: userId },
+      data: {
+        role: "ARTISAN",
+        profile: {
+          create: {
+            businessName,
+            craftType,
+            yearsOfExperience,
+            location,
+            bio
+          }
         }
-      }
-    },
-  });
+      },
+    });
+  } catch (error) {
+    console.error('Error updating user in onboardArtisanAction:', error);
+    throw new Error('Failed to update user profile');
+  }
 
   // Redirect to the shop once finished
   redirect("/shop");
