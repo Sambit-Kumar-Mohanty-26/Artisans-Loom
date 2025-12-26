@@ -34,6 +34,9 @@ model User {
   orders       Order[]
   bids         Bid[]
   forumPosts   ForumPost[]
+  forumLikes   ForumLike[]
+  followedBy    Follows[] @relation("following")
+  following     Follows[] @relation("follower")
   chatHistory  ChatHistory[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -120,15 +123,6 @@ model ChatHistory {
   userId   String
 }
 
-model ForumPost {
-  id      String   @id @default(cuid())
-  content String
-  tags    String[]
-  flagged Boolean  @default(false)
-  user    User     @relation(fields: [userId], references: [id])
-  userId  String
-}
-
 model Story {
   id        String   @id @default(cuid())
   title     String
@@ -136,4 +130,41 @@ model Story {
   heroImage String?
   artisanId String
   createdAt DateTime @default(now())
+}
+
+model ForumPost {
+  id        String      @id @default(cuid())
+  content   String
+  tags      String[]
+  flagged   Boolean     @default(false)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt 
+  
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+
+  parentId  String?
+  parent    ForumPost?  @relation("PostReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  children  ForumPost[] @relation("PostReplies")
+
+  likes     ForumLike[]
+}
+
+model ForumLike {
+  id        String    @id @default(cuid())
+  postId    String
+  post      ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade) 
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@unique([postId, userId])
+}
+
+model Follows {
+  follower    User   @relation("follower", fields: [followerId], references: [id])
+  followerId  String
+  following   User   @relation("following", fields: [followingId], references: [id])
+  followingId String
+
+  @@id([followerId, followingId])
 }
