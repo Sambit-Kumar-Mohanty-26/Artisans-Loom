@@ -35,8 +35,8 @@ model User {
   bids         Bid[]
   forumPosts   ForumPost[]
   forumLikes   ForumLike[]
-  followedBy    Follows[] @relation("following")
-  following     Follows[] @relation("follower")
+  followedBy   Follows[]     @relation("following")
+  following    Follows[]     @relation("follower")
   chatHistory  ChatHistory[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -55,18 +55,18 @@ model Profile {
 }
 
 model Product {
-  id          String       @id @default(cuid())
+  id          String        @id @default(cuid())
   title       String
   description String
   price       Float
   category    String
   materials   String[]
   images      String[]
-  stock       Int          @default(1)
+  stock       Int           @default(1)
   tags        String[]
-  views       Int          @default(0)
-  salesCount  Int          @default(0)
-  artisan     User         @relation(fields: [artisanId], references: [id])
+  views       Int           @default(0)
+  salesCount  Int           @default(0)
+  artisan     User          @relation(fields: [artisanId], references: [id])
   artisanId   String
   auction     AuctionItem?
   orderItems  OrderItem[]  
@@ -76,7 +76,7 @@ model Product {
 model Order {
   id         String      @id @default(cuid())
   total      Float
-  status     String      @default("PENDING")
+  status     String      @default("PENDING") // Status used for tracking (e.g., Paid, Shipped)
   customer   User        @relation(fields: [customerId], references: [id])
   customerId String
   items      OrderItem[] 

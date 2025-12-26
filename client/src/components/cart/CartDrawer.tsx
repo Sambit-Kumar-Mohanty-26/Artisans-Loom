@@ -3,12 +3,13 @@
 import { useCartStore } from "@/store/useCartStore"; //
 import { X, Minus, Plus, ShoppingBag, Trash2, Eraser } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link"; // [NEW] Import Link for navigation
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { toast } from "sonner"; // For a clear confirmation message
+import { toast } from "sonner"; //
 
 export default function CartDrawer() {
-  const { items, isOpen, setIsOpen, updateQuantity, removeFromCart, clearCart } = useCartStore();
+  const { items, isOpen, setIsOpen, updateQuantity, removeFromCart, clearCart } = useCartStore(); //
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
@@ -18,7 +19,6 @@ export default function CartDrawer() {
   if (!mounted) return null;
 
   const handleClearCart = () => {
-    // Optional: Add a confirmation check
     if (confirm("Are you sure you want to clear all items from your Loom?")) {
       clearCart(); //
       toast.info("Cart cleared successfully");
@@ -46,7 +46,6 @@ export default function CartDrawer() {
             </div>
             
             <div className="flex items-center gap-2">
-              {/* CLEAR CART BUTTON: Only shows if there are items */}
               {items.length > 0 && (
                 <button 
                   onClick={handleClearCart}
@@ -109,9 +108,12 @@ export default function CartDrawer() {
                 <span className="text-2xl font-serif font-bold">₹{subtotal.toLocaleString()}</span>
               </div>
               <div className="space-y-3">
-                <Button className="w-full h-14 bg-[#2F334F] hover:bg-[#1E2135] text-white text-lg font-bold rounded-xl shadow-lg transition-all active:scale-95">
-                  Checkout Now
-                </Button>
+                {/* [UPDATED] Linked to the Checkout page and closes the drawer on click */}
+                <Link href="/checkout" onClick={() => setIsOpen(false)} className="block w-full">
+                  <Button className="w-full h-14 bg-[#2F334F] hover:bg-[#1E2135] text-white text-lg font-bold rounded-xl shadow-lg transition-all active:scale-95">
+                    Checkout Now
+                  </Button>
+                </Link>
                 <button 
                   onClick={() => setIsOpen(false)}
                   className="w-full text-center text-sm font-medium text-[#8C7B70] hover:text-[#4A3526] transition-colors"

@@ -2,19 +2,26 @@
 
 import { useCartStore } from "@/store/useCartStore"; //
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Plus } from "lucide-react";
-import { toast } from "sonner"; //
+import { ShoppingCart } from "lucide-react";
+import { useRouter } from "next/navigation"; // For navigation
 import { useState, useEffect } from "react";
 
-export default function AddToCartActions({ product }: { product: any }) {
-  const addToCart = useCartStore((state) => state.addToCart); //
-  const items = useCartStore((state) => state.items); //
+// Matches the type expected in your page.tsx
+interface ProductProps {
+  product: {
+    id: string;
+    title: string;
+    price: number;
+    images: string[];
+  };
+}
+
+export default function AddToCartActions({ product }: ProductProps) {
+  const { addToCart, clearCart, setIsOpen, items } = useCartStore(); //
+  const router = useRouter();
   
-  // Find the current product's quantity in the cart
   const cartItem = items.find((i) => i.id === product.id);
   const quantity = cartItem ? cartItem.quantity : 0;
-
-  // State for the "pop" animation
   const [isAnimate, setIsAnimate] = useState(false);
 
   const handleAddToCart = () => {
@@ -25,13 +32,26 @@ export default function AddToCartActions({ product }: { product: any }) {
       image: product.images?.[0] || "/p1.png",
       quantity: 1
     });
-
-    // Trigger the animation
     setIsAnimate(true);
-    toast.success(`${product.title} added to cart!`);
   };
 
-  // Reset animation state after it finishes
+  // Direct "Buy Now" logic
+  const handleBuyNow = () => {
+    // 1. Clear current cart to focus only on this item
+    clearCart(); 
+    // 2. Add this specific item
+    addToCart({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image: product.images?.[0] || "/p1.png",
+      quantity: 1
+    });
+    // 3. Close drawer and go to checkout
+    setIsOpen(false); 
+    router.push("/checkout"); 
+  };
+
   useEffect(() => {
     if (isAnimate) {
       const timer = setTimeout(() => setIsAnimate(false), 300);
@@ -49,13 +69,8 @@ export default function AddToCartActions({ product }: { product: any }) {
       >
         <div className="relative">
           <ShoppingCart className="w-5 h-5" />
-          {/* Numerical count animation badge */}
           {quantity > 0 && (
-            <span 
-              className={`absolute -top-3 -right-3 bg-[#D97742] text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#2F334F] transition-all duration-300 ${
-                isAnimate ? "scale-125 animate-bounce" : "scale-100"
-              }`}
-            >
+            <span key={quantity} className="absolute -top-3 -right-3 bg-[#D97742] text-white text-[10px] w-6 h-6 rounded-full flex items-center justify-center border-2 border-[#2F334F] animate-in zoom-in duration-300">
               {quantity}
             </span>
           )}
@@ -64,8 +79,9 @@ export default function AddToCartActions({ product }: { product: any }) {
       </Button>
 
       <Button 
+        onClick={handleBuyNow} // Activates Buy Now
         variant="outline" 
-        className="flex-1 h-14 border-2 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/5 text-lg font-bold rounded-2xl transition-all"
+        className="flex-1 h-14 border-2 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/5 text-lg font-bold rounded-2xl transition-all active:scale-95"
       >
         Buy Now
       </Button>
