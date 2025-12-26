@@ -9,13 +9,17 @@ import Footer from "@/components/landing/Footer";
 export default function LandingPage() {
   return (
     <main className="min-h-screen bg-[#FDFBF7] flex flex-col">
+      {/* HeroSection likely contains the "Browse all Product" button */}
       <HeroSection />
+      
       <FeaturedSection />
       <TrendingSection />
       <RegionalMap />
       <ArtisanSpotlight />
       <ImpactSection />
-      <Footer /> {/* Add here */}
+      
+      {/* Footer added as per your previous code structure */}
+      <Footer />
     </main>
   );
 }

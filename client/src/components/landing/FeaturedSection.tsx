@@ -5,6 +5,7 @@ import { ArrowRight, ShoppingCart, MapPin, Eye } from "lucide-react";
 import Image from "next/image";
 import { RoyalDivider } from "@/components/ui/royal-divider";
 import { useEffect, useState, useRef } from "react";
+import Link from "next/link"; // [STEP 1] Import Link
 
 const products = [
   { id: 1, region: "Uttar Pradesh", title: "Banarasi Silk Saree", artisan: "Ananya Devi", price: "$299", image: "/p1.png", avatar: "/avatar.png" },
@@ -114,7 +115,7 @@ export default function FeaturedSection() {
                 <div className="absolute top-54 left-6 z-20">
                   <div className="w-14 h-14 rounded-full border-[3px] border-[#FFFBF5] shadow-lg p-0.5 bg-linear-to-br from-[#D4AF37] to-[#8B6508]">
                     <div className="relative w-full h-full rounded-full overflow-hidden bg-white">
-                       <Image src={product.avatar} alt="artisan" fill className="object-cover" />
+                        <Image src={product.avatar} alt="artisan" fill className="object-cover" />
                     </div>
                   </div>
                 </div>
@@ -143,9 +144,9 @@ export default function FeaturedSection() {
                     </div>
                   </div>
                   <div className="mt-2 p-px rounded-lg bg-linear-to-r from-[#D4AF37]/50 to-[#8B6508]/50">
-                     <Button className="w-full h-9 rounded-[7px] bg-white hover:bg-[#FDFBF7] text-[#D97742] font-medium text-xs border-none shadow-sm flex items-center justify-center gap-2">
-                         <ShoppingCart className="w-4 h-4" /> Add to Cart
-                     </Button>
+                      <Button className="w-full h-9 rounded-[7px] bg-white hover:bg-[#FDFBF7] text-[#D97742] font-medium text-xs border-none shadow-sm flex items-center justify-center gap-2">
+                          <ShoppingCart className="w-4 h-4" /> Add to Cart
+                      </Button>
                   </div>
                 </div>
               </div>
@@ -155,9 +156,12 @@ export default function FeaturedSection() {
 
         <div className="mt-16 text-center">
             <div className="inline-block p-0.5 rounded-full bg-linear-to-r from-transparent via-[#D4AF37] to-transparent">
-                <Button variant="ghost" className="h-12 px-8 rounded-full text-lg font-medium text-[#4A3526] hover:bg-[#D4AF37]/10 border border-[#D4AF37]/50 hover:border-[#D4AF37] transition-all">
-                    Browse All Products <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
+                {/* [STEP 2] Wrap the Button in a Link component */}
+                <Link href="/shop">
+                  <Button variant="ghost" className="h-12 px-8 rounded-full text-lg font-medium text-[#4A3526] hover:bg-[#D4AF37]/10 border border-[#D4AF37]/50 hover:border-[#D4AF37] transition-all">
+                      Browse All Products <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
             </div>
         </div>
 

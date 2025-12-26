@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Camera, Gift, Heart, Menu, Mic } from "lucide-react";
+import { ArrowRight, Camera, Gift, Heart, Menu, Mic, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import { RoyalDivider } from "@/components/ui/royal-divider";
 import Link from "next/link";
@@ -33,20 +33,21 @@ export default function HeroSection() {
           <div className="flex items-center gap-3">
             <div className="relative w-10 h-10 lg:w-12 lg:h-12 rounded-full border-2 border-[#D4AF37] overflow-hidden shadow-sm bg-white">
               <Image 
-                 src="/logo.png" 
-                 alt="Logo" 
-                 width={48} 
-                 height={48} 
-                 className="object-cover"
+                  src="/logo.png" 
+                  alt="Logo" 
+                  width={48} 
+                  height={48} 
+                  className="object-cover"
               />
             </div>
-            <span className="font-serif text-xl lg:text-2xl font-bold text-[#4A3526] tracking-tight">
+            <Link href="/" className="font-serif text-xl lg:text-2xl font-bold text-[#4A3526] tracking-tight">
               The Artisan's Loom
-            </span>
+            </Link>
           </div>
           <nav className="hidden lg:flex items-center gap-8 text-[#4A3526] font-medium text-[15px]">
-            <a href="#" className="hover:text-[#D97742] transition-colors">{t.discover}</a>
-            <a href="#" className="hover:text-[#D97742] transition-colors">{t.regions}</a>
+            {/* Navigation updated to point to real routes */}
+            <Link href="/shop" className="hover:text-[#D97742] transition-colors">{t.discover}</Link>
+            <Link href="/atlas" className="hover:text-[#D97742] transition-colors">{t.regions}</Link>
             <a href="#" className="hover:text-[#D97742] transition-colors">{t.artisans}</a>
             <a href="#" className="hover:text-[#D97742] transition-colors">{t.stories}</a>
             <a href="#" className="hover:text-[#D97742] transition-colors">{t.auction}</a>
@@ -94,7 +95,7 @@ export default function HeroSection() {
         </header>
 
         <div className="hidden lg:block shrink-0 opacity-40 scale-75 -mt-2">
-           <RoyalDivider />
+            <RoyalDivider />
         </div>
 
         <div className="flex-1 grid lg:grid-cols-12 gap-8 items-center min-h-0 pb-6 lg:pb-10">
@@ -144,33 +145,36 @@ export default function HeroSection() {
             </div>
 
             <div className="flex flex-wrap gap-4 pt-3">
-               <div className="group relative rounded-xl p-0.5 bg-linear-to-b from-[#F3E5AB] via-[#D4AF37] to-[#8B6508] shadow-xl hover:shadow-[#D97742]/40 transition-shadow duration-300">
+               {/* Main Call to Action: Points to /shop */}
+               <Link href="/shop" className="group relative rounded-xl p-0.5 bg-linear-to-b from-[#F3E5AB] via-[#D4AF37] to-[#8B6508] shadow-xl hover:shadow-[#D97742]/40 transition-shadow duration-300">
                 <Button className="relative h-12 lg:h-14 px-8 rounded-[10px] border-none text-white text-lg font-serif font-medium overflow-hidden bg-linear-to-b from-[#E68A53] to-[#C05621] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] hover:brightness-110 active:scale-95 transition-all">
                   <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
-                  <span className="relative z-10 drop-shadow-md">Discover Authentic Crafts</span>
+                  <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
+                    <ShoppingBag className="w-5 h-5" /> Browse All Products
+                  </span>
                 </Button>
-              </div>
+              </Link>
               
-              <div className="group relative rounded-xl p-0.5 bg-linear-to-b from-[#F3E5AB] via-[#D4AF37] to-[#8B6508] shadow-xl hover:shadow-[#2F334F]/40 transition-shadow duration-300">
+              <Link href="/sign-up" className="group relative rounded-xl p-0.5 bg-linear-to-b from-[#F3E5AB] via-[#D4AF37] to-[#8B6508] shadow-xl hover:shadow-[#2F334F]/40 transition-shadow duration-300">
                 <Button className="relative h-12 lg:h-14 px-8 rounded-[10px] border-none text-[#FDFBF7] text-lg font-serif font-medium overflow-hidden bg-linear-to-b from-[#3E4265] to-[#1A1D2E] shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] hover:brightness-110 active:scale-95 transition-all">
-                   <div className="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] animate-pulse"></div>
-                   <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
+                    <div className="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] animate-pulse"></div>
+                    <span className="relative z-10 flex items-center gap-2 drop-shadow-md">
                       Join as Artisan <ArrowRight className="w-5 h-5 text-[#D4AF37]" />
-                   </span>
+                    </span>
                 </Button>
-              </div>
+              </Link>
             </div>
           </div>
 
           <div className="hidden lg:flex lg:col-span-6 h-full items-center justify-end relative">
             <div className="relative w-full h-[85%] max-h-187.5 rounded-4xl overflow-hidden shadow-2xl shadow-[#4A3526]/10 border-[6px] border-white group">
                <Image 
-                 src="/hero-image.jpg" 
-                 alt="Artisan at work"
-                 fill
-                 className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                 priority
-                 sizes="(max-width: 768px) 100vw, 50vw"
+                  src="/hero-image.jpg" 
+                  alt="Artisan at work"
+                  fill
+                  className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
                />
                <div className="absolute inset-0 bg-linear-to-tr from-[#4A3526]/30 via-transparent to-[#FFF5E1]/20 mix-blend-overlay pointer-events-none"></div>
                <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(44,24,16,0.2)] pointer-events-none"></div>
