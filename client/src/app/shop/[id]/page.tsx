@@ -1,9 +1,10 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"; //
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, ShieldCheck, Truck, RefreshCw, ShoppingCart } from "lucide-react";
+import { MapPin, ShieldCheck, Truck, RefreshCw } from "lucide-react";
+import AddToCartActions from "./AddToCartActions"; // [IMPORT THE NEW LOGIC]
 
 // Helper function to fetch product data
 async function getProduct(id: string) {
@@ -18,20 +19,14 @@ async function getProduct(id: string) {
   return product;
 }
 
-/**
- * NEXT.JS 15 UPDATE: 
- * params is now a Promise and must be unwrapped with 'await'.
- */
 export default async function ProductDetails({ 
   params 
 }: { 
   params: Promise<{ id: string }> 
 }) {
-  // 1. Unwrap the params promise to get the actual ID
   const resolvedParams = await params;
   const id = resolvedParams.id;
 
-  // 2. Fetch the product using the unwrapped ID
   const product = await getProduct(id);
 
   if (!product) {
@@ -54,7 +49,6 @@ export default async function ProductDetails({
                 priority
               />
             </div>
-            {/* Small thumbnails if multiple images exist */}
             <div className="grid grid-cols-4 gap-4">
               {product.images?.map((img, idx) => (
                 <div key={idx} className="relative h-24 rounded-xl overflow-hidden border-2 border-white shadow-sm cursor-pointer hover:border-[#D4AF37]">
@@ -103,15 +97,8 @@ export default async function ProductDetails({
               </div>
             </div>
 
-            {/* ACTION BUTTONS */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-10">
-              <Button className="flex-1 h-14 bg-[#2F334F] hover:bg-[#1E2135] text-white text-lg font-bold rounded-2xl shadow-lg gap-2">
-                <ShoppingCart className="w-5 h-5" /> Add to Cart
-              </Button>
-              <Button variant="outline" className="flex-1 h-14 border-2 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/5 text-lg font-bold rounded-2xl">
-                Buy Now
-              </Button>
-            </div>
+            {/* ACTION BUTTONS - Now Active via the Client Component */}
+            <AddToCartActions product={product} />
 
             {/* TRUST BADGES */}
             <div className="grid grid-cols-3 gap-4 py-6 border-y border-[#E5DCCA]">

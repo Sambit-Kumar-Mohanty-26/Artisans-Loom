@@ -5,9 +5,19 @@ import { syncUser } from "@/utils/auth-sync";
 import "./globals.css";
 import { LayoutClient } from "./layout-client";
 import CraftMitra from "@/components/mitra/CraftMitra";
+import { Toaster } from "@/components/ui/sonner";
+import CartDrawer from "@/components/cart/CartDrawer"; // [NEW] Import the Cart Drawer
 
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif", weight: ["400", "600", "700"] });
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const playfair = Playfair_Display({ 
+  subsets: ["latin"], 
+  variable: "--font-serif", 
+  weight: ["400", "600", "700"] 
+});
+
+const inter = Inter({ 
+  subsets: ["latin"], 
+  variable: "--font-sans" 
+});
 
 export const metadata: Metadata = {
   title: "Artisan's Loom",
@@ -16,6 +26,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   try {
+    // Syncs Clerk user with your Prisma database
     await syncUser();
   } catch (error) {
     console.error('Error in syncUser during layout rendering:', error);
@@ -24,13 +35,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${playfair.variable} ${inter.variable} antialiased`}>
+        <body className={`${playfair.variable} ${inter.variable} antialiased bg-[#FDFBF7]`}>
+          {/* Navbar sits at the top of every page and tracks the cart count */}
+          
+          
           {children}
+          
           <LayoutClient />
+          
+          {/* [NEW] CartDrawer provides the sliding sidebar for the shopping cart */}
+          <CartDrawer /> 
+          
           <CraftMitra />
+          
+          {/* Toaster renders the "Added to Cart" notifications */}
+          <Toaster position="bottom-right" richColors closeButton />
         </body>
       </html>
     </ClerkProvider>
   );
 }
-
