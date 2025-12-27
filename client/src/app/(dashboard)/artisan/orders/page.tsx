@@ -1,10 +1,10 @@
-import { prisma } from "@/lib/prisma"; //
+import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { Package, Calendar, ChevronRight, ShoppingBag } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button"; //
+import { Button } from "@/components/ui/button";
 
 export default async function ArtisanPurchaseHistory() {
   const { userId: clerkId } = await auth();
@@ -34,7 +34,7 @@ export default async function ArtisanPurchaseHistory() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-serif font-bold text-[#4A3526]">My Purchases</h1>
-          <p className="text-[#8C7B70]">Orders you have placed for handcrafted treasures.</p>
+          <p className="text-[#8C7B70]">A history of the handcrafted treasures you have bought.</p>
         </div>
         <Link href="/shop">
           <Button className="bg-[#2F334F] hover:bg-[#1E2135] text-white rounded-xl gap-2">
@@ -48,8 +48,8 @@ export default async function ArtisanPurchaseHistory() {
           <div className="w-20 h-20 bg-[#FDFBF7] rounded-full flex items-center justify-center mx-auto mb-6">
             <Package className="w-10 h-10 text-[#E5DCCA]" />
           </div>
-          <h3 className="text-xl font-serif font-bold text-[#4A3526] mb-2">No orders found</h3>
-          <p className="text-[#8C7B70] mb-8">You haven't purchased anything from the Loom yet.</p>
+          <h3 className="text-xl font-serif font-bold text-[#4A3526] mb-2">No purchases yet</h3>
+          <p className="text-[#8C7B70] mb-8">You haven't ordered anything from the Loom yet.</p>
           <Link href="/shop">
             <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/5 rounded-xl">
               Start Shopping
@@ -60,7 +60,6 @@ export default async function ArtisanPurchaseHistory() {
         <div className="space-y-6">
           {orders.map((order) => (
             <div key={order.id} className="bg-white rounded-3xl border border-[#E5DCCA] shadow-sm overflow-hidden">
-              {/* HEADER */}
               <div className="bg-[#FDFBF7] px-8 py-4 border-b border-[#E5DCCA] flex flex-wrap justify-between items-center gap-4">
                 <div className="flex gap-8">
                   <div>
@@ -83,7 +82,6 @@ export default async function ArtisanPurchaseHistory() {
                 </div>
               </div>
 
-              {/* ITEMS */}
               <div className="p-8 space-y-6">
                 {order.items.map((item) => (
                   <div key={item.id} className="flex items-center gap-6 group">
@@ -96,9 +94,7 @@ export default async function ArtisanPurchaseHistory() {
                       />
                     </div>
                     <div className="flex-grow">
-                      <h3 className="font-bold text-[#4A3526] text-sm">
-                        {item.product.title}
-                      </h3>
+                      <h3 className="font-bold text-[#4A3526] text-sm">{item.product.title}</h3>
                       <div className="flex items-center gap-4 mt-0.5">
                         <p className="text-xs text-[#8C7B70]">Quantity: <span className="text-[#4A3526] font-bold">{item.quantity}</span></p>
                         <p className="text-xs text-[#8C7B70]">Price: <span className="text-[#4A3526] font-bold">₹{item.price.toLocaleString()}</span></p>

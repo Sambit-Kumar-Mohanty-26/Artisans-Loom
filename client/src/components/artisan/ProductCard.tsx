@@ -3,10 +3,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Edit, Trash2, Eye, Loader2 } from "lucide-react";
+import { Edit, Trash2, Sparkles, Video } from "lucide-react"; // [NEW] Added Video icon
 import { Button } from "@/components/ui/button";
 import { deleteProductAction } from "@/app/actions/products";
 import PremiumAlert from "@/components/ui/premium-alert";
+import MarketingGeneratorModal from "./MarketingGeneratorModal";
+import ReelScriptModal from "./ReelScriptModal"; // [NEW] Import Reel Script Modal
+import { generateReelScript } from "@/app/actions/marketing"; // [NEW] Import Reel Action
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -19,10 +22,18 @@ interface ProductProps {
   image: string;
   category: string;
   index: number;
+  description: string;   
+  materials: string[];  
 }
 
-export default function ProductCard({ id, title, price, stock, image, category, index }: ProductProps) {
+export default function ProductCard({ 
+  id, title, price, stock, image, category, index, description, materials 
+}: ProductProps) {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isMarketingOpen, setIsMarketingOpen] = useState(false);
+  const [isReelOpen, setIsReelOpen] = useState(false); // [NEW] Reel Modal state
+  const [isGeneratingReel, setIsGeneratingReel] = useState(false); // [NEW] Loading state
+  const [reelScript, setReelScript] = useState<any>(null); // [NEW] Script result state
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
@@ -38,9 +49,19 @@ export default function ProductCard({ id, title, price, stock, image, category, 
     }
   };
 
-  const handleEdit = () => {
-    toast.info("Opening editor...");
-    router.push(`/artisan/products/${id}/edit`);
+  // [NEW] Logic to trigger AI Reel generation
+  const handleCreateReel = async () => {
+    setIsReelOpen(true);
+    setIsGeneratingReel(true);
+    try {
+      const script = await generateReelScript({ title, category, materials, description });
+      setReelScript(script);
+    } catch (err) {
+      toast.error("Could not generate script. Please try again.");
+      setIsReelOpen(false);
+    } finally {
+      setIsGeneratingReel(false);
+    }
   };
 
   return (
@@ -62,7 +83,28 @@ export default function ProductCard({ id, title, price, stock, image, category, 
           
           <div className="absolute inset-0 bg-linear-to-t from-[#2C1810]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
+          {/* Action Buttons: Positioned like the reference project */}
           <div className="absolute bottom-4 right-4 flex gap-2 translate-y-10 group-hover:translate-y-0 transition-transform duration-300">
+            
+            {/* [NEW]: AI Reel Script Button */}
+            <Button 
+              size="icon" 
+              onClick={handleCreateReel}
+              className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 hover:bg-[#D97742] text-white shadow-lg"
+              title="Create AI Reel Script"
+            >
+              <Video className="w-4 h-4" />
+            </Button>
+
+            {/* AI Marketing Studio Button */}
+            <Button 
+              size="icon" 
+              onClick={() => setIsMarketingOpen(true)}
+              className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 hover:bg-[#D4AF37] hover:border-[#D4AF37] text-white shadow-lg"
+              title="AI Marketing Studio"
+            >
+              <Sparkles className="w-4 h-4" />
+            </Button>
 
             <Link href={`/artisan/edit/${id}`}>
               <Button 
@@ -108,6 +150,22 @@ export default function ProductCard({ id, title, price, stock, image, category, 
           </div>
         </div>
       </motion.div>
+
+      {/* AI Marketing Modal */}
+      <MarketingGeneratorModal 
+        isOpen={isMarketingOpen}
+        onClose={() => setIsMarketingOpen(false)}
+        product={{ title, category, materials, description }}
+      />
+
+      {/* [NEW]: AI Reel Modal */}
+      <ReelScriptModal 
+        isOpen={isReelOpen}
+        onClose={() => setIsReelOpen(false)}
+        script={reelScript}
+        isLoading={isGeneratingReel}
+        productName={title}
+      />
 
       <PremiumAlert 
         isOpen={isAlertOpen}

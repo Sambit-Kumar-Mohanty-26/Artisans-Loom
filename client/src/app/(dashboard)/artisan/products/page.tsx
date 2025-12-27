@@ -5,23 +5,23 @@ import Link from "next/link";
 import ProductCard from "@/components/artisan/ProductCard";
 import { RoyalDivider } from "@/components/ui/royal-divider";
 import { auth } from "@clerk/nextjs/server";
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation"; // Import redirect
+import { prisma } from "@/lib/prisma"; //
+import { redirect } from "next/navigation"; 
 
 export default async function ProductsPage() {
   const { userId } = await auth();
   
-  // --- FIX: Redirect if user is not logged in instead of crashing ---
+  // --- Redirect if user is not logged in ---
   if (!userId) {
     redirect("/sign-in");
   }
   
-  // 1. Fetch User (Safe query now that we know userId exists)
+  // 1. Fetch User profile safely
   const user = await prisma.user.findUnique({ where: { clerkId: userId } });
   
   if (!user) return <div className="p-8 text-center text-red-500">User profile not found. Please contact support.</div>;
   
-  // 2. Fetch Products
+  // 2. Fetch Products for this artisan
   const products = await prisma.product.findMany({ 
     where: { artisanId: user.id }, 
     orderBy: { createdAt: 'desc' } 
@@ -30,7 +30,7 @@ export default async function ProductsPage() {
   return (
     <div className="space-y-8 min-h-screen pb-20">
       
-      {/* Header */}
+      {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#4A3526]">My Masterpieces</h1>
@@ -62,7 +62,7 @@ export default async function ProductsPage() {
          </Button>
       </div>
 
-      {/* Grid */}
+      {/* Product Grid */}
       {products.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-[#D4AF37]/30">
            <p className="text-[#8C7B70] text-lg">Your loom is empty. Craft your first masterpiece!</p>
@@ -75,10 +75,13 @@ export default async function ProductsPage() {
               id={product.id}
               index={idx}
               title={product.title}
-              price={product.price.toString()}
+              price={product.price.toLocaleString()}
               stock={product.stock}
               category={product.category}
               image={product.images[0] || "/p1.png"}
+              // [NEW]: Passing required props for the Marketing AI Studio
+              description={product.description}
+              materials={product.materials}
             />
           ))}
         </div>
