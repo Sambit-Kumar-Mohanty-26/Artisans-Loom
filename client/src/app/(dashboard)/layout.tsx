@@ -2,7 +2,14 @@
 
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { LayoutDashboard, ShoppingBag, BarChart3, Settings, Users } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  ShoppingBag, 
+  BarChart3, 
+  Settings, 
+  Users, 
+  Package // [NEW] Added for the Orders icon
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import BackButton from "@/components/dashboard/BackButton";
 import Image from "next/image";
@@ -15,9 +22,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   
   const t = translations[language] || translations['en'];
 
+  // [UPDATE] Added "My Orders" link pointing to your new artisan orders page
   const sidebarLinks = [
     { name: t.dashboard, href: "/artisan", icon: LayoutDashboard },
     { name: t.products, href: "/artisan/products", icon: ShoppingBag },
+    { 
+      name: t.myOrders || "My Orders", // Fallback if translation key is missing
+      href: "/artisan/orders", 
+      icon: Package 
+    },
     { name: t.analytics, href: "/artisan/analytics", icon: BarChart3 },
     { name: t.community, href: "/artisan/community", icon: Users },
     { name: t.settings, href: "/artisan/settings", icon: Settings },
@@ -38,7 +51,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 />
              </div>
              <span className="font-serif text-xl font-bold text-[#FDFBF7] tracking-tight">
-               Artisan's Loom
+                Artisan's Loom
              </span>
            </Link>
         </div>
