@@ -1,13 +1,13 @@
 generator client {
   provider = "prisma-client-js"
-  // Directs the generated client to the server's node_modules to fix MODULE_NOT_FOUND
-  output   = "../../server/node_modules/.prisma/client"
+  // [FIX]: Hardcoded output removed to allow the postinstall script 
+  // to handle local generation on Render.
 }
 
 datasource db {
   provider = "postgresql"
   // [FIX]: url property is removed here for Prisma 7 compatibility. 
-  // Connection is handled via prisma.config.ts and constructor injection.
+  // Connection is handled via server/prisma.config.js and constructor injection.
 }
 
 enum Role {

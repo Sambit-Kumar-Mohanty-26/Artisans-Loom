@@ -2,7 +2,8 @@
 require('dotenv').config();
 
 module.exports = {
-  schema: "../client/prisma/schema.prisma",
+  // Now looks for the schema in the current (server) directory
+  schema: "schema.prisma", 
   datasource: {
     url: process.env.DATABASE_URL,
   },
