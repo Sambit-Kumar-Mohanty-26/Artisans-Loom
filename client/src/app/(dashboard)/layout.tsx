@@ -9,13 +9,12 @@ import SidebarNav from "@/components/dashboard/SidebarNav";
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { userId } = await auth();
   const user = userId ? await prisma.user.findUnique({ where: { clerkId: userId } }) : null;
-  
   const userRole = user?.role || "CUSTOMER"; 
   const displayRole = userRole === "ARTISAN" ? "Artisan Studio" : "Patron Account";
 
   return (
     <div className="flex min-h-screen bg-[#FDFBF7]">
-      
+
       <aside className="w-64 shrink-0 bg-[#2C1810] flex flex-col text-[#FDFBF7]">
         
         <div className="h-24 flex items-center px-6 border-b border-[#D4AF37]/20">
@@ -33,7 +32,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
              </span>
            </Link>
         </div>
-
+        
         <SidebarNav role={userRole} />
 
         <div className="mt-auto p-4 border-t border-[#D4AF37]/20 bg-black/20">
