@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "postinstall": "shx cp ../client/prisma/schema.prisma ./schema.prisma && npx prisma generate --schema ./schema.prisma && shx rm ./schema.prisma"
+    "postinstall": "node -e \"const fs=require('fs'); fs.copyFileSync('../client/prisma/schema.prisma', './schema.prisma');\" && npx prisma generate --schema ./schema.prisma && node -e \"require('fs').unlinkSync('./schema.prisma')\""
   },
   "keywords": [
     "websocket",
@@ -31,7 +31,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.0",
-    "prisma": "7.2.0",
-    "shx": "^0.4.0"
+    "prisma": "7.2.0"
   }
 }
