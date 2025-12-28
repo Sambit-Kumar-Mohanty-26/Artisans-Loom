@@ -7,6 +7,7 @@ import { Minus, Plus, Trash2, ShoppingCart, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import BackButton from "@/components/ui/BackButton";
 
 export default function MyCartPage() {
   const { items, updateQuantity, removeFromCart } = useCartStore();
@@ -21,6 +22,7 @@ export default function MyCartPage() {
   return (
     <div className="space-y-8 min-h-screen pb-20">
       
+      <BackButton position="top-left" fallbackUrl="/customer" />
       <div>
         <h1 className="text-4xl font-serif font-bold text-[#4A3526]">My Cart</h1>
         <p className="text-[#8C7B70] mt-2">Review your selected masterpieces before checkout.</p>

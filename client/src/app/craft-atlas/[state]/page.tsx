@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
 import AIInsights from "@/components/atlas/AIInsights";
+import BackButton from "@/components/ui/BackButton";
 
 export default async function StatePage({ params }: { params: Promise<{ state: string }> }) {
   const { state } = await params;
@@ -27,13 +28,7 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
 
          <div className="absolute inset-0 bg-linear-to-t from-[#FDFBF7] via-black/40 to-black/30"></div>
          
-         <div className="absolute top-6 left-6 z-20">
-            <Link href="/craft-atlas">
-               <Button variant="ghost" className="rounded-full bg-black/20 backdrop-blur-md text-white hover:bg-white hover:text-black gap-2 border border-white/20">
-                 <ArrowLeft className="w-4 h-4" /> Back to Atlas
-               </Button>
-            </Link>
-         </div>
+         <BackButton position="top-left" fallbackUrl="/craft-atlas" />
 
          <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 z-10 text-center md:text-left flex flex-col md:flex-row items-end justify-between gap-6">
             <div>

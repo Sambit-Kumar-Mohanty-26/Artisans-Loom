@@ -5,6 +5,7 @@ import { RoyalDivider } from "@/components/ui/royal-divider";
 import { getOrderStatus, STATUS_COLORS } from "@/utils/orderStatus";
 import { format } from "date-fns";
 import { Package, Truck } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 export default async function MyOrdersPage() {
   const { userId } = await auth();
@@ -25,6 +26,7 @@ export default async function MyOrdersPage() {
   return (
     <div className="space-y-8 min-h-screen pb-20">
       
+      <BackButton position="top-left" fallbackUrl="/customer" />
       <div>
         <h1 className="text-4xl font-serif font-bold text-[#4A3526]">My Treasures</h1>
         <p className="text-[#8C7B70] mt-2">Track the journey of your handcrafted items.</p>

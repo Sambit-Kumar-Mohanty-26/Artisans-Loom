@@ -11,7 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { RoyalDivider } from "@/components/ui/royal-divider";
-import BackButton from "@/components/dashboard/BackButton";
+import UniversalBackButton from "@/components/ui/BackButton";
 
 const OCCASIONS = [
   "Wedding (Shaadi)", "Diwali", "Housewarming (Griha Pravesh)", "Anniversary", 
@@ -333,7 +333,7 @@ export default function AssistantsPage() {
 
       </div>
       
-      <BackButton />
+      <UniversalBackButton position="top-left" />
     </div>
   );
 }

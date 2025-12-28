@@ -6,7 +6,8 @@ import ProductCard from "@/components/artisan/ProductCard";
 import { RoyalDivider } from "@/components/ui/royal-divider";
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma"; //
-import { redirect } from "next/navigation"; 
+import { redirect } from "next/navigation";
+import BackButton from "@/components/ui/BackButton"; 
 
 export default async function ProductsPage() {
   const { userId } = await auth();
@@ -30,6 +31,7 @@ export default async function ProductsPage() {
   return (
     <div className="space-y-8 min-h-screen pb-20">
       
+      <BackButton position="top-left" fallbackUrl="/artisan" />
       {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-end gap-6">
         <div>

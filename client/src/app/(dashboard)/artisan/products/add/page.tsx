@@ -10,6 +10,7 @@ import Image from "next/image";
 import { createProductAction, generateDescriptionAction, processVoiceListingAction } from "@/app/actions/products";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import BackButton from "@/components/ui/BackButton";
 
 export default function AddProductPage() {
   const [isListening, setIsListening] = useState(false);
@@ -126,6 +127,7 @@ export default function AddProductPage() {
       
       <div className="absolute top-0 right-0 w-125 h-125 bg-[#D4AF37]/5 rounded-full blur-[120px] pointer-events-none"></div>
 
+      <BackButton position="top-left" fallbackUrl="/artisan/products" />
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
            <h1 className="text-4xl font-serif font-bold text-[#4A3526]">Creation Studio</h1>

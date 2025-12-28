@@ -2,6 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { MapPin, ShoppingBag, Users } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 export default async function AllArtisansPage() {
   const artisans = await prisma.user.findMany({
@@ -14,6 +15,7 @@ export default async function AllArtisansPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12 space-y-10">
+      <BackButton position="top-left" fallbackUrl="/" />
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-serif font-bold text-[#4A3526]">Our Master Artisans</h1>
         <p className="text-[#8C7B70] max-w-2xl mx-auto">

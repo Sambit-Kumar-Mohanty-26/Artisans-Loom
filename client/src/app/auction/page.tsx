@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Gavel, Sparkles } from "lucide-react";
-import BackButton from "@/components/dashboard/BackButton";
+import UniversalBackButton from "@/components/ui/BackButton";
 import Auction3DGrid from "@/components/auction/Auction3DGrid";
 import { checkAndResolveAuctionAction } from "@/app/actions/auction";
 
@@ -65,7 +65,7 @@ export default async function AuctionPage() {
         )}
         
       </div>
-      <BackButton />
+      <UniversalBackButton position="top-left" fallbackUrl="/" />
     </div>
   );
 }

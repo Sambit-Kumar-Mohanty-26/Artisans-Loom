@@ -13,7 +13,7 @@ import {
   ShoppingCart
 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import BackButton from "@/components/dashboard/BackButton";
+import UniversalBackButton from "@/components/ui/BackButton";
 import Image from "next/image";
 import { useLanguageStore } from "@/store/useLanguageStore";
 import { useUserStore } from "@/store/useUserStore"; // [NEW] Access the role
@@ -95,7 +95,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       <main className="flex-1 p-8 lg:p-12 overflow-y-auto">
         {children}
-        <BackButton />
+        <UniversalBackButton position="top-left" />
       </main>
     </div>
   );

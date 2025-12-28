@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2, ShoppingCart, Filter, Search, MapPin, X, Check, ChevronDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
+import BackButton from "@/components/ui/BackButton";
 
 export const dynamic = 'force-dynamic';
 
@@ -191,6 +192,7 @@ function ShopContent() {
 
       <div className="container mx-auto py-12 px-4 lg:px-8 relative z-10">
         
+        <BackButton position="top-left" fallbackUrl="/" />
         <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
           <div>
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#4A3526]">

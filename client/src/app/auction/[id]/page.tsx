@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import SafeImage from "@/components/ui/safe-image";
 import Countdown from "@/components/auction/Countdown";
 import BiddingInterface from "@/components/auction/BiddingInterface";
-import BackButton from "@/components/dashboard/BackButton";
+import UniversalBackButton from "@/components/ui/BackButton";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Crown, ShieldCheck, MapPin, History } from "lucide-react";
 import { checkAndResolveAuctionAction } from "@/app/actions/auction";
@@ -141,7 +141,7 @@ export default async function AuctionRoom({ params }: { params: Promise<{ id: st
         </div>
 
       </div>
-      <BackButton />
+      <UniversalBackButton position="top-left" customClass="w-12 h-12" fallbackUrl="/auction" />
     </div>
   );
 }

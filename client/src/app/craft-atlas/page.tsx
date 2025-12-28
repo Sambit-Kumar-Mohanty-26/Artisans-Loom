@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { allStatesData } from "@/lib/statesData";
 import { ArrowRight, Search, Map, Compass } from "lucide-react";
-import BackButton from "@/components/dashboard/BackButton";
+import UniversalBackButton from "@/components/ui/BackButton";
 import SafeImage from "@/components/ui/safe-image";
 import { Input } from "@/components/ui/input";
 
@@ -146,7 +146,7 @@ export default function CraftAtlasGrid() {
         </motion.div>
 
       </div>
-      <BackButton />
+      <UniversalBackButton position="top-left" fallbackUrl="/atlas" />
     </div>
   );
 }

@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { updateProductAction, generateDescriptionAction } from "@/app/actions/products";
 import { toast } from "sonner";
+import BackButton from "@/components/ui/BackButton";
 
 export default function EditProductForm({ product }: { product: any }) {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -68,6 +69,7 @@ export default function EditProductForm({ product }: { product: any }) {
       
       <div className="absolute top-0 right-0 w-125 h-125 bg-[#D4AF37]/5 rounded-full blur-[120px] pointer-events-none"></div>
 
+      <BackButton position="top-left" fallbackUrl="/artisan/products" />
       <div className="mb-8">
          <h1 className="text-4xl font-serif font-bold text-[#4A3526]">Refine Masterpiece</h1>
          <p className="text-[#8C7B70]">Update details or stock for your existing item.</p>

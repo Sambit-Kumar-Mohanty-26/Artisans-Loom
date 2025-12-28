@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, ShieldCheck, Truck, RefreshCw } from "lucide-react";
 import AddToCartActions from "./AddToCartActions"; // [IMPORT THE NEW LOGIC]
+import BackButton from "@/components/ui/BackButton"; // [NEW] Add back button
 
 // Helper function to fetch product data
 async function getProduct(id: string) {
@@ -36,6 +37,7 @@ export default async function ProductDetails({
   return (
     <main className="bg-[#FDFBF7] min-h-screen py-12">
       <div className="container mx-auto px-4 lg:px-8">
+        <BackButton position="top-left" fallbackUrl="/shop" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           
           {/* LEFT: IMAGE GALLERY */}

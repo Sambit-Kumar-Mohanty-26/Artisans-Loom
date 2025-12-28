@@ -6,6 +6,7 @@ import { X, ChevronRight, Loader2, Play, Sparkles, BookOpen, MapPin } from "luci
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import UniversalBackButton from "@/components/ui/BackButton";
 
 // Enhanced interface for safer data access
 interface Story {
@@ -179,8 +180,9 @@ function StoriesContent() {
 
       {/* --- MAIN PAGE GALLERY CONTENT --- */}
       <div className="max-w-6xl mx-auto px-4 pt-12 space-y-12">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 border-b border-[#E5DCCA] pb-8">
-          <div className="text-center md:text-left space-y-2">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 border-b border-[#E5DCCA] pb-8 relative">
+          <UniversalBackButton position="top-left" fallbackUrl="/" />
+          <div className="text-center md:text-left space-y-2 flex-1">
             <h1 className="text-5xl font-serif font-bold text-[#4A3526]">Artisan Spotlights</h1>
             <p className="text-[#8C7B70] italic font-serif">Stories of heritage, told through the hands of masters.</p>
           </div>
