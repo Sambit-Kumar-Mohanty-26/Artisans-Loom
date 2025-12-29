@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Star } from "lucide-react";
 import Image from "next/image";
 import { RoyalDivider } from "@/components/ui/royal-divider";
+import Link from "next/link";
 
 const artisans = [
   {
@@ -109,6 +110,7 @@ export default function ArtisanSpotlight() {
         </div>
 
         <div className="flex justify-center">
+           <Link href="/artisans">
            <div className="group relative rounded-full p-0.5 bg-linear-to-r from-[#F3E5AB] via-[#D4AF37] to-[#8B6508] shadow-xl hover:shadow-[#2F334F]/40 transition-shadow">
               <Button className="h-14 px-10 rounded-full bg-[#2F334F] hover:bg-[#1E2135] text-[#FDFBF7] text-lg font-serif font-medium border-none relative overflow-hidden">
                  <span className="relative z-10 flex items-center gap-3">
@@ -117,6 +119,7 @@ export default function ArtisanSpotlight() {
                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               </Button>
            </div>
+           </Link>
         </div>
 
       </div>

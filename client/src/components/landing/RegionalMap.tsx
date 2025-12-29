@@ -1,12 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Compass, Lightbulb } from "lucide-react";
 import Image from "next/image";
 import { RoyalDivider } from "@/components/ui/royal-divider";
 import Link from "next/link"; 
 
-const regions = [
+const allRegions = [
   {
     id: 1,
     title: "The Desert Weavers",
@@ -39,9 +40,52 @@ const regions = [
     icon: "🏔️",
     color: "border-[#4A3526]",
   },
+  {
+    id: 5,
+    title: "Western Maritime Crafts",
+    subtitle: "Gujarat & Maharashtra",
+    desc: "Ship building & coastal textile traditions.",
+    icon: "⚓",
+    color: "border-[#1E88E5]",
+  },
+  {
+    id: 6,
+    title: "Northeastern Weavers",
+    subtitle: "Assam & Meghalaya",
+    desc: "Traditional silk weaving & bamboo crafts.",
+    icon: "🎋",
+    color: "border-[#8E24AA]",
+  },
+  {
+    id: 7,
+    title: "Central Tribal Artisans",
+    subtitle: "Madhya Pradesh & Chhattisgarh",
+    desc: "Gond art & tribal pottery traditions.",
+    icon: "🎨",
+    color: "border-[#00897B]",
+  },
+  {
+    id: 8,
+    title: "Bengal Craft Masters",
+    subtitle: "West Bengal & Bihar",
+    desc: "Dhokra metalwork & handloom textiles.",
+    icon: "🧵",
+    color: "border-[#F57C00]",
+  },
 ];
 
+const getRandomRegions = (count = 4) => {
+  const shuffled = [...allRegions].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+};
+
 export default function RegionalMap() {
+  const [displayedRegions, setDisplayedRegions] = useState(getRandomRegions(4));
+
+  const handleInspireMe = () => {
+    setDisplayedRegions(getRandomRegions(4));
+  };
+
   return (
     <section className="relative w-full py-24 overflow-hidden bg-[#FDFBF7]">
       
@@ -64,8 +108,12 @@ export default function RegionalMap() {
           </p>
           
           <div className="flex justify-center">
-             <Button variant="outline" className="h-10 px-6 rounded-full bg-[#FFFBF5] border-[#D4AF37]/50 text-[#8C7B70] hover:text-[#D4AF37] hover:border-[#D4AF37] shadow-sm gap-2 transition-all hover:shadow-md">
-                <Lightbulb className="w-4 h-4" /> Inspire Me
+             <Button 
+                variant="outline" 
+                className="h-10 px-6 rounded-full bg-[#FFFBF5] border-[#D4AF37]/50 text-[#8C7B70] hover:text-[#D4AF37] hover:border-[#D4AF37] shadow-sm gap-2 transition-all hover:shadow-md hover:scale-105 active:scale-95"
+                onClick={handleInspireMe}
+             >
+                <Lightbulb className="w-4 h-4 animate-spin-slow" /> Inspire Me
              </Button>
           </div>
 
@@ -100,16 +148,20 @@ export default function RegionalMap() {
           <div className="lg:col-span-5 flex flex-col justify-between gap-8">
 
              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-               {regions.map((region) => (
-                  <div key={region.id} className="relative group bg-[#FFFBF5] rounded-2xl p-8 border border-[#E5DCCA] shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 min-h-55 flex flex-col justify-center">
-                     
+               {displayedRegions.map((region, index) => (
+                  <div 
+                    key={region.id} 
+                    className="relative group bg-[#FFFBF5] rounded-2xl p-8 border border-[#E5DCCA] shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 min-h-55 flex flex-col justify-center opacity-0 animate-fade-in"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                                   
                      <div className="absolute top-2 left-2 w-5 h-5 border-t-2 border-l-2 border-[#D4AF37]/30 rounded-tl-lg group-hover:border-[#D4AF37] transition-colors"></div>
                      <div className="absolute top-2 right-2 w-5 h-5 border-t-2 border-r-2 border-[#D4AF37]/30 rounded-tr-lg group-hover:border-[#D4AF37] transition-colors"></div>
                      <div className="absolute bottom-2 left-2 w-5 h-5 border-b-2 border-l-2 border-[#D4AF37]/30 rounded-bl-lg group-hover:border-[#D4AF37] transition-colors"></div>
                      <div className="absolute bottom-2 right-2 w-5 h-5 border-b-2 border-r-2 border-[#D4AF37]/30 rounded-br-lg group-hover:border-[#D4AF37] transition-colors"></div>
-
-                     <div className="mb-4 text-4xl">{region.icon}</div>
-
+             
+                     <div className="mb-4 text-4xl opacity-20 group-hover:opacity-100 transition-all duration-300">{region.icon}</div>
+             
                      <h3 className="text-xl font-serif font-bold text-[#4A3526] leading-tight mb-2 group-hover:text-[#D97742] transition-colors">
                         {region.title}
                      </h3>
@@ -119,6 +171,12 @@ export default function RegionalMap() {
                      <p className="text-sm text-[#5D4037] leading-relaxed">
                         {region.desc}
                      </p>
+                                  
+                     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-4">
+                        <span className="text-sm font-medium text-[#D97742] flex items-center gap-1">
+                           Discover More <ArrowRight className="w-3 h-3" />
+                        </span>
+                     </div>
                   </div>
                ))}
              </div>
