@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Camera, Gift, Heart, Menu, Mic, ShoppingBag, Search, Loader2 } from "lucide-react";
+import { ArrowRight, Camera, Gift, Heart, Menu, Mic, ShoppingBag, Search, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import { RoyalDivider } from "@/components/ui/royal-divider";
 import Link from "next/link";
@@ -15,6 +15,7 @@ import { useUserStore } from "@/store/useUserStore";
 import { translations } from "@/lib/translations"; 
 import { analyzeImageForSearch } from "@/app/actions/visual-search";
 import { toast } from "sonner";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function HeroSection() {
   const { isSignedIn } = useUser();
@@ -33,6 +34,8 @@ export default function HeroSection() {
   const [query, setQuery] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   
   const recognitionRef = useRef<any>(null);
   const queryRef = useRef(""); 
@@ -173,8 +176,76 @@ export default function HeroSection() {
               </div>
             )}
           </div>
-          <div className="lg:hidden text-[#4A3526]"><Menu className="w-6 h-6" /></div>
+          <div className="lg:hidden text-[#4A3526]">
+            <Menu className="w-6 h-6 cursor-pointer" onClick={toggleMobileMenu} />
+          </div>
         </header>
+
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, x: "100%" }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed inset-0 z-50 bg-[#FDFBF7] flex flex-col p-6 lg:hidden"
+            >
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                    <div className="relative w-10 h-10 rounded-full border-2 border-[#D4AF37] overflow-hidden shadow-sm bg-white">
+                      <Image src="/logo.png" alt="Logo" width={40} height={40} className="object-cover" priority />
+                    </div>
+                    <span className="font-serif text-xl font-bold text-[#4A3526]">Artisan's Loom</span>
+                </div>
+                <Button variant="ghost" size="icon" onClick={toggleMobileMenu} className="text-[#4A3526]">
+                  <X className="w-6 h-6" />
+                </Button>
+              </div>
+
+              <div className="flex flex-col gap-6 text-lg font-medium text-[#4A3526]">
+                <Link href="/shop" onClick={toggleMobileMenu} className="hover:text-[#D97742] transition-colors">{t.nav.shop || "Shop"}</Link>
+                <Link href="/craft-atlas" onClick={toggleMobileMenu} className="hover:text-[#D97742] transition-colors">{t.nav.atlas || "Atlas"}</Link>
+                <Link href="/artisans" onClick={toggleMobileMenu} className="hover:text-[#D97742] transition-colors">{t.nav.artisans || "Artisans"}</Link>
+                <Link href="/stories" onClick={toggleMobileMenu} className="hover:text-[#D97742] transition-colors">{t.nav.stories || "Stories"}</Link>
+                <Link href="/auction" onClick={toggleMobileMenu} className="hover:text-[#D97742] transition-colors">{t.nav.auction || "Auction"}</Link>
+                
+                <div className="h-px bg-[#D4AF37]/20 my-2" />
+                
+                <Link href="/assistants" onClick={toggleMobileMenu} className="flex items-center gap-2 hover:text-[#D97742] transition-colors">
+                   <Gift className="w-5 h-5" /> Gifting
+                </Link>
+                
+                <div className="flex items-center justify-between mt-2">
+                   <span>Language</span>
+                   <LanguageSwitcher />
+                </div>
+                
+                <div className="mt-auto">
+                    {isSignedIn ? (
+                      <Link href={dashboardPath} onClick={toggleMobileMenu} className="w-full">
+                        <Button className="w-full h-12 rounded-full bg-[#2F334F] hover:bg-[#1E2135] text-white font-medium shadow-md">
+                          {t.nav.dashboard || "Dashboard"}
+                        </Button>
+                      </Link>
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                         <Link href="/sign-in" onClick={toggleMobileMenu}>
+                            <Button variant="outline" className="w-full h-12 rounded-full border-[#D4AF37] text-[#4A3526] hover:bg-[#F3E5AB]">
+                               {t.nav.login || "Sign In"}
+                            </Button>
+                         </Link>
+                         <Link href="/sign-up" onClick={toggleMobileMenu}>
+                            <Button className="w-full h-12 rounded-full bg-[#2F334F] hover:bg-[#1E2135] text-white font-medium shadow-md">
+                               {t.nav.signup || "Sign Up"}
+                            </Button>
+                         </Link>
+                      </div>
+                    )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="hidden lg:block shrink-0 opacity-40 scale-75 -mt-2"><RoyalDivider /></div>
 
